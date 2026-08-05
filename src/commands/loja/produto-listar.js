@@ -32,7 +32,7 @@ async function execute(interaction) {
       produtos
         .map(
           (p) =>
-            `**#${p.id} — ${p.nome}**\n${formatProductPrice(p)} • estoque: ${
+            `**${p.id} — ${p.nome}**\n${formatProductPrice(p)} • estoque: ${
               p.estoque < 0 ? 'ilimitado' : p.estoque
             }\n${p.descricao ? p.descricao : '_sem descricao_'}`
         )

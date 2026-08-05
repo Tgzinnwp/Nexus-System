@@ -1,6 +1,5 @@
 const fs = require("node:fs");
 const path = require("node:path");
-const { randomUUID } = require("node:crypto");
 
 const dataDir = path.join(__dirname, "..", "..", "data");
 const productsPath = path.join(dataDir, "products.json");
@@ -74,19 +73,42 @@ function getProductPrice(product) {
     return Math.max(0.01, Math.round((discountedPrice + Number.EPSILON) * 100) / 100);
 }
 
+function normalizeProductName(productName) {
+    return String(productName || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "") || "produto";
+}
+
+function createProductId(guildProducts, productName) {
+    const highestSequence = guildProducts.reduce((highest, product) => {
+        const match = String(product.id || "").match(/#(\d+)$/);
+
+        if (!match) return highest;
+
+        return Math.max(highest, Number(match[1]));
+    }, 0);
+
+    return `${normalizeProductName(productName)}#${highestSequence + 1}`;
+}
+
 function addProduct(guildId, productData) {
     const products = loadProducts();
+    const guildProducts = products[guildId] || [];
 
     const product = {
-        id: randomUUID(),
+        ...productData,
+        id: createProductId(guildProducts, productData.nome),
         guildId,
         active: true,
-        createdAt: new Date().toISOString(),
-        ...productData
+        createdAt: new Date().toISOString()
     };
 
     products[guildId] = [
-        ...(products[guildId] || []),
+        ...guildProducts,
         product
     ];
 

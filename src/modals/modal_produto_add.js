@@ -69,7 +69,7 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setColor(config.colors.success)
             .setDescription(
-                `${config.emojis.success} Produto **${product.nome}** cadastrado com sucesso.`
+                `${config.emojis.success} Produto **${product.nome}** cadastrado com sucesso.\nID: \`${product.id}\``
             );
 
         await interaction.reply({
