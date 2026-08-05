@@ -1,0 +1,23 @@
+# Dependências
+node_modules/
+
+# Variáveis de ambiente
+.env
+
+# Dados gerados em tempo de execução
+/data/*.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editores
+.vscode/
+.idea/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Transcripts gerados localmente (se optar por salvar em disco além do canal de logs)
+/transcripts/
